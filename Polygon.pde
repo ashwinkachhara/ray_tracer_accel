@@ -1,4 +1,4 @@
-class Polygon extends Shape{
+class Polygon extends Geometry{
   PVector A,B,C,n;
   PVector Ca = new PVector();
   PVector Cd = new PVector();
@@ -26,6 +26,14 @@ class Polygon extends Shape{
     PVector.cross(PVector.sub(B,A),PVector.sub(C,B), n);
     n.normalize();
     moving = m;
+  }
+  
+  PVector getRayd(PVector d, PVector P){
+    return d;
+  }
+  
+  PVector getRayP(PVector P){
+    return P;
   }
   
   float intersects(PVector d, PVector P){

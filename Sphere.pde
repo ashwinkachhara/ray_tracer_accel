@@ -1,4 +1,4 @@
-class Sphere extends Shape{
+class Sphere extends Geometry{
   PVector pos = new PVector();
   PVector Ca = new PVector();
   PVector Cd = new PVector();
@@ -26,6 +26,14 @@ class Sphere extends Shape{
   
   Sphere(){
     
+  }
+  
+  PVector getRayd(PVector d, PVector P){
+    return d;
+  }
+  
+  PVector getRayP(PVector P){
+    return P;
   }
   
   float intersects(PVector d, PVector P){

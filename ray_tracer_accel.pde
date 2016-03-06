@@ -15,10 +15,12 @@ float winsize=0;
 PVector ka = new PVector(0, 0, 0);
 PVector kd = new PVector(0, 0, 0);
 // Arrays to store properties of objects and lights
-Shape[] objects = new Shape[2000];
+Geometry[] objects = new Geometry[2000];
+//Geometry[] named_objects = new Geometry[2000];
+HashMap<String,Geometry> named_objects = new HashMap<String,Geometry>();
 Light[] lights = new Light[20];
-int numLights=0, numObjects=0;
-int raysPerPx;
+int numLights=0, numObjects=0, numNamedObjects = 0;
+int raysPerPx = 1;
 float lensRadius, lensFocal;
 boolean isLens;
 
@@ -317,7 +319,18 @@ void interpreter(String filename) {
       lensRadius = float(token[1]);
       lensFocal = float(token[2]);
       isLens = true;
+//////////////////// named_object ////////////////////
+    } else if (token[0].equals("named_object")){
+      String name = new String(token[1]);
+      numObjects--;
+      named_objects.put(name,objects[numObjects]);
+      numNamedObjects++;
+//////////////////// instance ////////////////////
+    } else if (token[0].equals("instance")){
+      PMatrix3D mat = (PMatrix3D) getMatrix();
       
+      objects[numObjects] = new Instance(mat, token[1]);
+      numObjects++;
 //////////////////// write ////////////////////
     } else if (token[0].equals("write")) {
       // save the current image to a .png file
@@ -347,6 +360,7 @@ void interpreter(String filename) {
           PVector pxcolor = new PVector(0,0,0); // For anti-aliasing in case of multiple rays per pixel
           PVector focalHit = new PVector(0,0,-lensFocal);
           //println("Per Ray");
+          //println(x+" "+y);
           for (int r=0; r<raysPerPx;r++){
             
             PVector startPt = new PVector(0,0,0);
@@ -397,8 +411,9 @@ void interpreter(String filename) {
               foundIndex++;
               //println("found: "+obIndex);
               PVector pxcol = new PVector(0, 0, 0);
-              PVector P = startPt;
-              P.add(PVector.mult(rayP,minT));
+              PVector P = objects[obIndex].getRayP(startPt);
+              
+              P.add(PVector.mult(objects[obIndex].getRayd(rayP, startPt),minT));
               //rayP.copy();
               //P.mult(minT);
               PVector normal = new PVector(0,0,0);
@@ -434,6 +449,7 @@ void interpreter(String filename) {
             }
           }
           //println("col: "+pxcolor);
+          //println(raysPerPx);
           pxcolor.div(raysPerPx);
           set(x, 299 - y, color(pxcolor.x, pxcolor.y, pxcolor.z));
         }

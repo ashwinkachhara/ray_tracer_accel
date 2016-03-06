@@ -1,4 +1,4 @@
-abstract class Shape{
+abstract class Geometry{
   public abstract float intersects(PVector d, PVector P);
   public abstract PVector getNormal(PVector P);
   public abstract PVector getNormal(PVector P, float t);
@@ -7,4 +7,6 @@ abstract class Shape{
   public abstract void printval();
   public abstract boolean isMoving();
   public abstract float intersects(PVector d, PVector P, float t);
+  public abstract PVector getRayd(PVector d, PVector P);
+  public abstract PVector getRayP(PVector P);
 }
