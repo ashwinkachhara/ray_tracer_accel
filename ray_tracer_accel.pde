@@ -411,9 +411,9 @@ void interpreter(String filename) {
               foundIndex++;
               //println("found: "+obIndex);
               PVector pxcol = new PVector(0, 0, 0);
-              PVector P = objects[obIndex].getRayP(startPt);
+              PVector P = objects[obIndex].getM1P(startPt);
               
-              P.add(PVector.mult(objects[obIndex].getRayd(rayP, startPt),minT));
+              P.add(PVector.mult(objects[obIndex].getM1d(rayP, startPt),minT));
               //rayP.copy();
               //P.mult(minT);
               PVector normal = new PVector(0,0,0);
@@ -431,7 +431,7 @@ void interpreter(String filename) {
                 //if (lights[l].visible(P, normal, obIndex)) {
                   //println("visible");
                   //println(lights[l].visible(P,normal,obIndex));
-                pxcol.add(objects[obIndex].calcDiffuse(P, normal, l).mult(lights[l].visible(P, normal, obIndex)));
+                pxcol.add(objects[obIndex].calcDiffuse(objects[obIndex].getMP(P), normal, l).mult(lights[l].visible(objects[obIndex].getMP(P), normal, obIndex)));
                 
               }
               //pixels[loc] = color(pxcolor.x,pxcolor.y,pxcolor.z);

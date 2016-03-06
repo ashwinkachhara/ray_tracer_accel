@@ -7,6 +7,7 @@ abstract class Geometry{
   public abstract void printval();
   public abstract boolean isMoving();
   public abstract float intersects(PVector d, PVector P, float t);
-  public abstract PVector getRayd(PVector d, PVector P);
-  public abstract PVector getRayP(PVector P);
+  public abstract PVector getM1d(PVector d, PVector P);
+  public abstract PVector getM1P(PVector P);
+  public abstract PVector getMP(PVector P);
 }

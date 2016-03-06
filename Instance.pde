@@ -7,7 +7,7 @@ class Instance extends Geometry {
     tfMatrix.invert();
     name = ob;
   }
-  PVector getRayd(PVector d, PVector P){
+  PVector getM1d(PVector d, PVector P){
     PVector dd = new PVector(0,0,0), Pp = new PVector(0,0,0);
     tfMatrix.mult(PVector.add(P,d),dd);
     tfMatrix.mult(P,Pp);
@@ -15,9 +15,18 @@ class Instance extends Geometry {
     return dd;
   }
   
-  PVector getRayP(PVector P){
+  PVector getM1P(PVector P){
     PVector Pp = new PVector(0,0,0);
     tfMatrix.mult(P,Pp);
+    return Pp;
+  }
+  
+  PVector getMP(PVector P){
+    PVector Pp = new PVector(0,0,0);
+    PMatrix3D mat = new PMatrix3D(tfMatrix);
+    mat.invert();
+    mat.mult(P,Pp);
+    
     return Pp;
   }
   
@@ -29,7 +38,7 @@ class Instance extends Geometry {
     return named_objects.get(name).intersects(dd,Pp);
   }
   PVector getNormal(PVector P){
-    PMatrix3D mat = tfMatrix;
+    PMatrix3D mat = new PMatrix3D(tfMatrix);
     mat.transpose();
     mat.invert();
     PVector n = named_objects.get(name).getNormal(P), nn = new PVector(0,0,0);
@@ -40,9 +49,7 @@ class Instance extends Geometry {
     return named_objects.get(name).getNormal(P,t);
   }
   PVector calcDiffuse(PVector P, PVector n, int l){
-    PVector Pp = new PVector(0,0,0);
-    tfMatrix.mult(P,Pp);
-    return named_objects.get(name).calcDiffuse(Pp,n,l);
+    return named_objects.get(name).calcDiffuse(P,n,l);
   }
   PVector calcAmbient(int l){
     return named_objects.get(name).calcAmbient(l);

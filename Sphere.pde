@@ -28,11 +28,15 @@ class Sphere extends Geometry{
     
   }
   
-  PVector getRayd(PVector d, PVector P){
+  PVector getM1d(PVector d, PVector P){
     return d;
   }
   
-  PVector getRayP(PVector P){
+  PVector getM1P(PVector P){
+    return P;
+  }
+  
+  PVector getMP(PVector P){
     return P;
   }
   
