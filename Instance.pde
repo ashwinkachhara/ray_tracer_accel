@@ -45,9 +45,7 @@ class Instance extends Geometry {
     mat.mult(n, nn);
     return nn;
   }
-  PVector getNormal(PVector P, float t){
-    return named_objects.get(name).getNormal(P,t);
-  }
+
   PVector calcDiffuse(PVector P, PVector n, int l){
     return named_objects.get(name).calcDiffuse(P,n,l);
   }
@@ -56,14 +54,5 @@ class Instance extends Geometry {
   }
   void printval(){
     
-  }
-  boolean isMoving(){
-    return named_objects.get(name).isMoving();
-  }
-  float intersects(PVector d, PVector P, float t){
-    PVector dd = new PVector(0,0,0), Pp = new PVector(0,0,0);
-    tfMatrix.mult(d,dd);
-    tfMatrix.mult(P,Pp);
-    return named_objects.get(name).intersects(d, P, t);
   }
 }

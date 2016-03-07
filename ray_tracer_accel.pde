@@ -331,6 +331,10 @@ void interpreter(String filename) {
       
       objects[numObjects] = new Instance(mat, token[1]);
       numObjects++;
+//////////////////// box ////////////////////
+    } else if (token[0].equals("box")){
+      objects[numObjects] = new AABB(new PVector(float(token[1]), float(token[2]), float(token[3])), new PVector(float(token[4]), float(token[5]), float(token[6])), ka, kd);
+      numObjects++;
 //////////////////// write ////////////////////
     } else if (token[0].equals("write")) {
       // save the current image to a .png file
@@ -395,10 +399,7 @@ void interpreter(String filename) {
               //if so, are the points visible from any light source
               //print(x+" "+y+" "+rayP+" ");
               float t;
-              if (objects[o].isMoving())
-                t = objects[o].intersects(rayP, startPt, time);
-              else
-                t = objects[o].intersects(rayP, startPt);
+              t = objects[o].intersects(rayP, startPt);
               if (t > 0 && t<minT) {
                 //println(t);
                 found = true;
@@ -417,10 +418,7 @@ void interpreter(String filename) {
               //rayP.copy();
               //P.mult(minT);
               PVector normal = new PVector(0,0,0);
-              if (objects[obIndex].isMoving())
-                normal = objects[obIndex].getNormal(P,time);
-              else
-                normal = objects[obIndex].getNormal(P);
+              normal = objects[obIndex].getNormal(P);
               normal.normalize();
   
               //println("Iterating over lights");
