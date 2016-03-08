@@ -287,7 +287,6 @@ void interpreter(String filename) {
       mat.mult(p1, Pp1);
       mat.mult(p2, Pp2);
 
-
       objects[numObjects] = new Sphere(Pp1, r, ka, kd, true, Pp1, Pp2);
       numObjects++;
 //////////////////// disk_light ////////////////////
@@ -382,7 +381,7 @@ void interpreter(String filename) {
               
             } else if (raysPerPx == 1){
               rayP = new PVector(x1, y1, -1);
-            } else {
+            } else {  
               rayP = new PVector(random(x1-pxbound,x1+pxbound),random(y1-pxbound,y1+pxbound),-1);
             }
             float time = random(0.0,1.0); // For motion blur
@@ -395,9 +394,6 @@ void interpreter(String filename) {
             
             //println("Iterating over objects");
             for (int o=0; o<numObjects; o++) {
-              //does object[i] and rayP intersect at any point(s)?
-              //if so, are the points visible from any light source
-              //print(x+" "+y+" "+rayP+" ");
               float t;
               t = objects[o].intersects(rayP, startPt);
               if (t > 0 && t<minT) {
@@ -408,46 +404,34 @@ void interpreter(String filename) {
               }
             }
             if (found) {
-              //set(x,y,color(1,1,1));
               foundIndex++;
               //println("found: "+obIndex);
+              //objects[obIndex].printval();
               PVector pxcol = new PVector(0, 0, 0);
-              PVector P = objects[obIndex].getM1P(startPt);
-              
-              P.add(PVector.mult(objects[obIndex].getM1d(rayP, startPt),minT));
-              //rayP.copy();
-              //P.mult(minT);
+              //PVector P = objects[obIndex].getM1P(startPt);
+              PVector P = startPt;
+                            
+              //P.add(PVector.mult(objects[obIndex].getM1d(rayP, startPt),minT));
+              P.add(PVector.mult(rayP,minT));
+
               PVector normal = new PVector(0,0,0);
-              normal = objects[obIndex].getNormal(P);
+              normal = objects[obIndex].getNormal(objects[obIndex].getM1P(P));
               normal.normalize();
-  
-              //println("Iterating over lights");
-  
+              //normal.z = - normal.z;
+              //println(normal);
+
               for (int l=0; l<numLights; l++) {
                 pxcol.add(objects[obIndex].calcAmbient(l));
-                //println("Ambient: "+pxcolor.x+" "+pxcolor.y+" "+pxcolor.z);
-                //if (lights[l].visible(P, normal, obIndex)) {
-                  //println("visible");
-                  //println(lights[l].visible(P,normal,obIndex));
-                pxcol.add(objects[obIndex].calcDiffuse(objects[obIndex].getMP(P), normal, l).mult(lights[l].visible(objects[obIndex].getMP(P), normal, obIndex)));
-                
+                //pxcol.add(objects[obIndex].calcDiffuse(objects[obIndex].getMP(P), normal, l).mult(lights[l].visible(objects[obIndex].getMP(P), normal, obIndex)));
+                //println(objects[obIndex].calcDiffuse(P, normal, l)+" "+lights[l].visible(P, normal, obIndex));
+                pxcol.add(objects[obIndex].calcDiffuse(P, normal, l).mult(lights[l].visible(P, normal, obIndex)));
               }
-              //pixels[loc] = color(pxcolor.x,pxcolor.y,pxcolor.z);
-              //set(x, 299 - y, color(pxcol.x, pxcol.y, pxcol.z));
               pxcolor.add(pxcol);
-              //println("pxdone");
-              //println("Color: "+pxcolor.x+" "+pxcolor.y+" "+pxcolor.z);
             } else {
               unFoundIndex++;
-              //println("not found");
-              //pixels[loc] = color(bgcolor.x,bgcolor.y,bgcolor.z);
-              //set(x, 299 - y, color(bgcolor.x, bgcolor.y, bgcolor.z));
               pxcolor.add(bgcolor);
-              //println("bgdone");
             }
           }
-          //println("col: "+pxcolor);
-          //println(raysPerPx);
           pxcolor.div(raysPerPx);
           set(x, 299 - y, color(pxcolor.x, pxcolor.y, pxcolor.z));
         }

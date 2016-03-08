@@ -38,17 +38,17 @@ class AABB extends Geometry {
   PVector getNormal(PVector P){
     PVector n = new PVector(0,0,0);
     if (P.x == Pmin.x)
-      n = new PVector(1,0,0);
-    else if (P.x == Pmax.x)
       n = new PVector(-1,0,0);
+    else if (P.x == Pmax.x)
+      n = new PVector(1,0,0);
     else if (P.y == Pmin.y)
-      n = new PVector(0,1,0);
-    else if (P.y == Pmax.y)
       n = new PVector(0,-1,0);
+    else if (P.y == Pmax.y)
+      n = new PVector(0,1,0);
     else if (P.z == Pmin.z)
-      n = new PVector(0,0,1);
-    else if (P.z == Pmax.z)
       n = new PVector(0,0,-1);
+    else if (P.z == Pmax.z)
+      n = new PVector(0,0,1);
     return n;
   }
   PVector calcDiffuse(PVector P, PVector n, int l){

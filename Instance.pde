@@ -26,7 +26,6 @@ class Instance extends Geometry {
     PMatrix3D mat = new PMatrix3D(tfMatrix);
     mat.invert();
     mat.mult(P,Pp);
-    
     return Pp;
   }
   
@@ -39,9 +38,11 @@ class Instance extends Geometry {
   }
   PVector getNormal(PVector P){
     PMatrix3D mat = new PMatrix3D(tfMatrix);
+    //mat.invert();
     mat.transpose();
-    mat.invert();
-    PVector n = named_objects.get(name).getNormal(P), nn = new PVector(0,0,0);
+    
+    PVector n = named_objects.get(name).getNormal(P);
+    PVector nn = new PVector(0,0,0);
     mat.mult(n, nn);
     return nn;
   }
@@ -53,6 +54,6 @@ class Instance extends Geometry {
     return named_objects.get(name).calcAmbient(l);
   }
   void printval(){
-    
+    println(name);
   }
 }
