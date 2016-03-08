@@ -59,7 +59,7 @@ void setup() {
   printMatrix();
   //resetMatrix();    // you may want to reset the matrix here
   reInit();
-  interpreter("t01.cli");
+  interpreter("t04.cli");
 }
 
 // Press key 1 to 9 and 0 to run different test cases.
@@ -365,7 +365,6 @@ void interpreter(String filename) {
           //println("Per Ray");
           //println(x+" "+y);
           for (int r=0; r<raysPerPx;r++){
-            
             PVector startPt = new PVector(0,0,0);
             if (isLens){
               if (r==0){
@@ -378,20 +377,16 @@ void interpreter(String filename) {
               float sampleTheta = random(0.0,2*PI);
               startPt = new PVector(sampleR*cos(sampleTheta),sampleR*sin(sampleTheta),0);
               rayP = PVector.sub(focalHit,startPt);
-              
             } else if (raysPerPx == 1){
               rayP = new PVector(x1, y1, -1);
             } else {  
               rayP = new PVector(random(x1-pxbound,x1+pxbound),random(y1-pxbound,y1+pxbound),-1);
             }
             float time = random(0.0,1.0); // For motion blur
-            //if (x%50 == 0 && y%50 == 0)
-            //  println(x+" "+y+" "+x1+" "+y1+" "+rayP+" "+pxbound);
-  
             float minT = MAX_INT; 
             int obIndex=0;
             boolean found = false;
-            
+            //println(rayP);
             //println("Iterating over objects");
             for (int o=0; o<numObjects; o++) {
               float t;
@@ -433,7 +428,7 @@ void interpreter(String filename) {
             }
           }
           pxcolor.div(raysPerPx);
-          set(x, 299 - y, color(pxcolor.x, pxcolor.y, pxcolor.z));
+          set(x, screen_width - 1 - y, color(pxcolor.x, pxcolor.y, pxcolor.z));
         }
       }
       
