@@ -11,6 +11,11 @@ class AABB extends Geometry {
     Cd = kd.copy();
   }
   
+  AABB(PVector pmin, PVector pmax){
+    Pmin = pmin.copy();
+    Pmax = pmax.copy();
+  }
+  
   boolean isPtOnBox(PVector P){
     return (P.y>=Pmin.y && P.y<=Pmax.y && P.z>=Pmin.z && P.z<=Pmax.z && P.x>=Pmin.x && P.x<=Pmax.x);
   }
@@ -29,8 +34,8 @@ class AABB extends Geometry {
       if (t[i]>0){
         PVector pt = PVector.add(P,PVector.mult(d,t[i]));
         boolean ptonbox = isPtOnBox(pt);
-        if (d.x==0 && d.y==0)
-          println("HELLO", ptonbox,t[i],pt);
+        //if (d.x==0 && d.y==0)
+          //println("HELLO", ptonbox,t[i],pt);
         if (ptonbox){
           if (sol > t[i])
             sol = t[i];
@@ -40,7 +45,7 @@ class AABB extends Geometry {
     if (sol == MAX_FLOAT)
       return -1000;
     else{
-      println(sol);
+      //println(sol);
       return sol;
     }
     //float tmin, tmax;

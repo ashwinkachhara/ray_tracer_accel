@@ -1,5 +1,5 @@
 # four overlapping boxes of different colors (shrunk to be small)
-# this uses a list, so it should run faster than t05.clil
+# this uses a list, so it should run faster than t05.cli
 
 fov 60
 point_light 0 0 0 1 1 1
@@ -47,4 +47,3 @@ end_list
 reset_timer
 write t06.png
 print_timer
-

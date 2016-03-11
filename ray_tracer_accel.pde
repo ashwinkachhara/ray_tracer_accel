@@ -4,6 +4,8 @@
 //
 ///////////////////////////////////////////////////////////////////////
 
+import java.util.Stack;
+
 int screen_width = 300;
 int screen_height = 300;
 
@@ -18,6 +20,8 @@ PVector kd = new PVector(0, 0, 0);
 Geometry[] objects = new Geometry[2000];
 //Geometry[] named_objects = new Geometry[2000];
 HashMap<String,Geometry> named_objects = new HashMap<String,Geometry>();
+Stack listIndices = new Stack();
+
 Light[] lights = new Light[20];
 int numLights=0, numObjects=0, numNamedObjects = 0;
 int raysPerPx = 1;
@@ -59,7 +63,7 @@ void setup() {
   printMatrix();
   //resetMatrix();    // you may want to reset the matrix here
   reInit();
-  interpreter("t04.cli");
+  interpreter("t06.cli");
 }
 
 // Press key 1 to 9 and 0 to run different test cases.
@@ -332,22 +336,35 @@ void interpreter(String filename) {
       numObjects++;
 //////////////////// box ////////////////////
     } else if (token[0].equals("box")){
-      objects[numObjects] = new AABB(new PVector(float(token[1]), float(token[2]), float(token[3])), new PVector(float(token[4]), float(token[5]), float(token[6])), ka, kd);
+      float px = float(token[1]);
+      float py = float(token[2]);
+      float pz = float(token[3]);
+      float pX = float(token[4]);
+      float pY = float(token[5]);
+      float pZ = float(token[6]);
+      
+      objects[numObjects] = new AABB(new PVector(min(px,pX),min(py,pY),min(pz,pZ)), new PVector(max(px,pX),max(py,pY),max(pz,pZ)), ka, kd);
       numObjects++;
+//////////////////// begin_list ////////////////////
+    } else if (token[0].equals("begin_list")){
+      listIndices.push(numObjects);
+//////////////////// end_list ////////////////////
+    } else if (token[0].equals("end_list")){
+      int startIndex = 0;
+      if (!listIndices.empty()){
+        startIndex = (int)listIndices.pop();
+        //println(startIndex,numObjects);
+        assert(startIndex < numObjects);
+        List mylist = new List(startIndex,numObjects);
+        numObjects = startIndex;
+        objects[numObjects] = mylist;
+        numObjects++;
+      }
 //////////////////// write ////////////////////
     } else if (token[0].equals("write")) {
       // save the current image to a .png file
       println("Num Objects: "+numObjects);
-      //objects[0].printval();
       loadPixels();
-      //println(numObjects);
-      //println("Lights: "+numLights);
-      //println(objects[0].pos);
-      //println(lights[0].pos);
-      //println(objects[0].radius);
-      //println(width);
-      //println(height);
-      //scale(-1,1);
       int foundIndex = 0, unFoundIndex = 0;
 
       for (int x=0; x<width; x++) {
@@ -417,8 +434,6 @@ void interpreter(String filename) {
 
               for (int l=0; l<numLights; l++) {
                 pxcol.add(objects[obIndex].calcAmbient(l));
-                //pxcol.add(objects[obIndex].calcDiffuse(objects[obIndex].getMP(P), normal, l).mult(lights[l].visible(objects[obIndex].getMP(P), normal, obIndex)));
-                //println(objects[obIndex].calcDiffuse(P, normal, l)+" "+lights[l].visible(P, normal, obIndex));
                 pxcol.add(objects[obIndex].calcDiffuse(P, normal, l).mult(lights[l].visible(P, normal, obIndex)));
               }
               pxcolor.add(pxcol);
