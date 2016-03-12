@@ -7,6 +7,15 @@ class Instance extends Geometry {
     tfMatrix.invert();
     name = ob;
   }
+  
+  PVector getPMax(){
+    return getMP(named_objects.get(name).getPMax());
+  }
+  
+  PVector getPMin(){
+    return getMP(named_objects.get(name).getPMin());
+  }
+  
   PVector getM1d(PVector d, PVector P){
     PVector dd = new PVector(0,0,0), Pp = new PVector(0,0,0);
     tfMatrix.mult(PVector.add(P,d),dd);

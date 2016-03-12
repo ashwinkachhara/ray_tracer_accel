@@ -7,4 +7,6 @@ abstract class Geometry{
   public abstract PVector getM1d(PVector d, PVector P);
   public abstract PVector getM1P(PVector P);
   public abstract PVector getMP(PVector P);
+  public abstract PVector getPMax();
+  public abstract PVector getPMin();
 }

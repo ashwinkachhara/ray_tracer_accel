@@ -13,8 +13,32 @@ class List extends Geometry {
     }
     //compute box
     //println("Hello",items.length);
-    bbox = new AABB(new PVector(-2, -2, -2), new PVector(2, 2, 2));
+    PVector pmax = getPMax();
+    PVector pmin = getPMin();
+    //println(pmax,pmin);
+    bbox = new AABB(pmin, pmax);
   }
+  
+  PVector getPMax(){
+    PVector Pmax = new PVector (-MAX_FLOAT,-MAX_FLOAT,-MAX_FLOAT);
+    PVector pp;
+    for (int i = 0; i<numItems; i++){
+      pp = items[i].getPMax();
+      Pmax = new PVector(max(Pmax.x,pp.x), max(Pmax.y,pp.y), max(Pmax.z,pp.z));
+    }
+    return Pmax;
+  }
+  
+  PVector getPMin(){
+    PVector Pmin = new PVector (MAX_FLOAT,MAX_FLOAT,MAX_FLOAT);
+    PVector pp;
+    for (int i = 0; i<numItems; i++){
+      pp = items[i].getPMin();
+      Pmin = new PVector(min(Pmin.x,pp.x), min(Pmin.y,pp.y), min(Pmin.z,pp.z));
+    }
+    return Pmin;
+  }
+  
   float intersects(PVector d, PVector P) {
     float minT = MAX_INT; 
     boolean found = false;

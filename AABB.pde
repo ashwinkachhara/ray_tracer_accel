@@ -16,6 +16,14 @@ class AABB extends Geometry {
     Pmax = pmax.copy();
   }
   
+  PVector getPMax(){
+    return Pmax;
+  }
+  
+  PVector getPMin(){
+    return Pmin;
+  }
+  
   boolean isPtOnBox(PVector P){
     return (P.y>=Pmin.y && P.y<=Pmax.y && P.z>=Pmin.z && P.z<=Pmax.z && P.x>=Pmin.x && P.x<=Pmax.x);
   }

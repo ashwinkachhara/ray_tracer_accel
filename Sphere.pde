@@ -28,6 +28,14 @@ class Sphere extends Geometry{
     
   }
   
+  PVector getPMax(){
+    return new PVector(pos.x+radius,pos.y+radius,pos.z+radius);
+  }
+  
+  PVector getPMin(){
+    return new PVector(pos.x-radius,pos.y-radius,pos.z-radius);
+  }
+  
   PVector getM1d(PVector d, PVector P){
     return d;
   }

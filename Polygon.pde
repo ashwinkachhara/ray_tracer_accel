@@ -28,6 +28,14 @@ class Polygon extends Geometry{
     moving = m;
   }
   
+  PVector getPMax(){
+    return new PVector(max(A.x,B.x,C.x),max(A.y,B.y,C.y),max(A.z,B.z,C.z));
+  }
+  
+  PVector getPMin(){
+    return new PVector(min(A.x,B.x,C.x),min(A.y,B.y,C.y),min(A.z,B.z,C.z));
+  }
+  
   PVector getM1d(PVector d, PVector P){
     return d;
   }
