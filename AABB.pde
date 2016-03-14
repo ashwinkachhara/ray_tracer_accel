@@ -1,5 +1,5 @@
 class AABB extends Geometry {
-  PVector Pmin, Pmax;
+  public PVector Pmin, Pmax;
   PVector Ca = new PVector();
   PVector Cd = new PVector();
   
