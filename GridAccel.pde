@@ -9,6 +9,7 @@ class GridAccel extends Geometry{
   PVector invVoxWidth = new PVector(0,0,0);
   int nv;
   
+  int hitObjectIndex;
   
   GridAccel(int start, int end){
     items = new ArrayList<Integer>();
@@ -89,6 +90,7 @@ class GridAccel extends Geometry{
         if (t!=-1000){
           found = true;
           minT = t;
+          hitObjectIndex = currentVox.hitObIndex;
         }
         
         // Find step axis
@@ -119,13 +121,18 @@ class GridAccel extends Geometry{
           nextCrossingT.z += deltaT.z;
         }
       }
-      
     }
     return minT;
   }
-  PVector getNormal(PVector P){}
-  PVector calcDiffuse(PVector P, PVector n, int l){}
-  PVector calcAmbient(int l){}
+  PVector getNormal(PVector P){
+    return primitives[hitObjectIndex].getNormal(P);
+  }
+  PVector calcDiffuse(PVector P, PVector n, int l){
+    return primitives[hitObjectIndex].calcDiffuse(P,n,l);
+  }
+  PVector calcAmbient(int l){
+    return primitives[hitObjectIndex].calcAmbient(l);
+  }
   void printval(){}
   PVector getM1d(PVector d, PVector P){
     return d;
