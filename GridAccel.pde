@@ -1,5 +1,5 @@
 class GridAccel extends Geometry{
-  public ArrayList<Geometry> items;
+  ArrayList<Integer> items;
   int numItems = 0;
   Voxel[] voxels;
   
@@ -11,9 +11,10 @@ class GridAccel extends Geometry{
   
   
   GridAccel(int start, int end){
-    items = new ArrayList<Geometry>();
+    items = new ArrayList<Integer>();
     for (int i = start; i<end; i++) {
-      items.add(objects[i]);
+      items.add(i);
+      primitives[i] = objects[i];
       numItems++;
     }
     PVector pmax = getPMax();
@@ -27,7 +28,70 @@ class GridAccel extends Geometry{
   }
   
   float intersects(PVector d, PVector P){
-  
+    float minT = MAX_INT; 
+    boolean found = false;
+    
+    // check ray vs overall grid bounds
+    if (bounds.intersects(d, P) == -1000){
+      //println("no box");
+      return -1000;
+    } else {
+      minT = bounds.intersects(d, P);
+      PVector gridIntersect = PVector.add(P,PVector.mult(d,minT));
+      
+      // Set up 3D DDA for this ray
+      PVector nextCrossingT = new PVector(0,0,0), deltaT = new PVector(0,0,0);
+      PVector step = new PVector(0,0,0), out = new PVector(0,0,0), pos = new PVector(0,0,0);
+      pos = posToVoxel(gridIntersect);
+      
+      if (d.x>=0){
+        nextCrossingT.x = minT + (voxelToPos(PVector.add(pos,new PVector(1,1,1))).x - gridIntersect.x)/d.x;
+        deltaT.x = voxWidth.x/d.x;
+        step.x = 1;
+        out.x = nVoxels.x;
+      } else {
+        nextCrossingT.x = minT + (voxelToPos(pos).x - gridIntersect.x)/d.x;
+        deltaT.x = -voxWidth.x/d.x;
+        step.x = -1;
+        out.x = -1;
+      }
+      if (d.y>=0){
+        nextCrossingT.y = minT + (voxelToPos(PVector.add(pos,new PVector(1,1,1))).y - gridIntersect.y)/d.y;
+        deltaT.y = voxWidth.y/d.y;
+        step.y = 1;
+        out.y = nVoxels.y;
+      } else {
+        nextCrossingT.y = minT + (voxelToPos(pos).y - gridIntersect.y)/d.y;
+        deltaT.y = -voxWidth.y/d.y;
+        step.y = -1;
+        out.y = -1;
+      }
+      if (d.z>=0){
+        nextCrossingT.z = minT + (voxelToPos(PVector.add(pos,new PVector(1,1,1))).z - gridIntersect.z)/d.z;
+        deltaT.z = voxWidth.z/d.z;
+        step.z = 1;
+        out.z = nVoxels.z;
+      } else {
+        nextCrossingT.z = minT + (voxelToPos(pos).z - gridIntersect.z)/d.z;
+        deltaT.z = -voxWidth.z/d.z;
+        step.z = -1;
+        out.z = -1;
+      }
+      
+      // Walk ray through voxel grid
+      Voxel currentVox;
+      minT = -1000;
+      while(true){
+        currentVox = voxels[offset(int(pos.x),int(pos.y),int(pos.z))];
+        float t = currentVox.intersects(d,P);
+        if (t!=-1000){
+          found = true;
+        }
+        break;
+      }
+      
+    }
+    return minT;
   }
   PVector getNormal(PVector P){}
   PVector calcDiffuse(PVector P, PVector n, int l){}

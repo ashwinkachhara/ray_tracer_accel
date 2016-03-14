@@ -18,6 +18,7 @@ PVector ka = new PVector(0, 0, 0);
 PVector kd = new PVector(0, 0, 0);
 // Arrays to store properties of objects and lights
 Geometry[] objects = new Geometry[2000];
+Geometry[] primitives;
 //Geometry[] named_objects = new Geometry[2000];
 HashMap<String,Geometry> named_objects = new HashMap<String,Geometry>();
 Stack listIndices = new Stack();
