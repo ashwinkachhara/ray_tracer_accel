@@ -81,13 +81,43 @@ class GridAccel extends Geometry{
       // Walk ray through voxel grid
       Voxel currentVox;
       minT = -1000;
+      int b2,b1,b0;
+      float[] NextCrossingT = new float[3];
       while(true){
         currentVox = voxels[offset(int(pos.x),int(pos.y),int(pos.z))];
         float t = currentVox.intersects(d,P);
         if (t!=-1000){
           found = true;
+          minT = t;
         }
-        break;
+        
+        // Find step axis
+        NextCrossingT = nextCrossingT.array();
+        b2 = (NextCrossingT[0] < NextCrossingT[1])? 1:0;
+        b1 = (NextCrossingT[0] < NextCrossingT[2])? 1:0;
+        b0 = (NextCrossingT[1] < NextCrossingT[2])? 1:0;
+        int bits = (b2 << 2) +
+                   (b1 << 1) +
+                   (b0);
+        int cmpToAxis[] = { 2, 1, 2, 1, 2, 2, 0, 0 };
+        int stepAxis = cmpToAxis[bits];
+        
+        if (stepAxis == 0){
+          pos.x += step.x;
+          if (pos.x == out.x)
+            break;
+          nextCrossingT.x += deltaT.x;
+        } else if (stepAxis == 1){
+          pos.y += step.y;
+          if (pos.y == out.y)
+            break;
+          nextCrossingT.y += deltaT.y;
+        } else if (stepAxis == 2){
+          pos.z += step.z;
+          if (pos.z == out.z)
+            break;
+          nextCrossingT.z += deltaT.z;
+        }
       }
       
     }
@@ -110,7 +140,7 @@ class GridAccel extends Geometry{
     PVector Pmax = new PVector (-MAX_FLOAT,-MAX_FLOAT,-MAX_FLOAT);
     PVector pp;
     for (int i = 0; i<numItems; i++){
-      pp = items.get(i).getPMax();
+      pp = primitives[i].getPMax();
       Pmax = new PVector(max(Pmax.x,pp.x), max(Pmax.y,pp.y), max(Pmax.z,pp.z));
     }
     return Pmax;
@@ -119,7 +149,7 @@ class GridAccel extends Geometry{
     PVector Pmin = new PVector (MAX_FLOAT,MAX_FLOAT,MAX_FLOAT);
     PVector pp;
     for (int i = 0; i<numItems; i++){
-      pp = items.get(i).getPMin();
+      pp = primitives[i].getPMin();
       Pmin = new PVector(min(Pmin.x,pp.x), min(Pmin.y,pp.y), min(Pmin.z,pp.z));
     }
     return Pmin;
@@ -192,8 +222,8 @@ class GridAccel extends Geometry{
     PVector pMax, pMin;
     for (int i = 0; i<numItems; i++){
       // voxel extent of geometry
-      pMax = posToVoxel(items.get(i).getPMax());
-      pMin = posToVoxel(items.get(i).getPMin());
+      pMax = posToVoxel(primitives[i].getPMax());
+      pMin = posToVoxel(primitives[i].getPMin());
       
       // add geometry to overlapping voxels
       for (int z = int(pMin.z); z < int(pMax.z); z++){
