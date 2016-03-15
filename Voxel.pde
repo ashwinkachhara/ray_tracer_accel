@@ -1,5 +1,5 @@
 class Voxel {
-  ArrayList<Integer> items;
+  public ArrayList<Integer> items;
   public int hitObIndex = 0;
   
   Voxel(){
@@ -7,10 +7,13 @@ class Voxel {
   }
   
   void addGeometry(int g){
+    //println("addGeo");
     items.add(g);
+    //println("addGeoDone");
   }
   
   float intersects(PVector d, PVector P){
+    //println("Jello");
     float minT = MAX_INT; 
     boolean found = false;
     for (int i=0; i<items.size(); i++) {
@@ -20,9 +23,10 @@ class Voxel {
         //println(t);
         found = true;
         minT = t;
-        hitObIndex = i;
+        hitObIndex = items.get(i);
       }
     }
+    //println("Yello");
     if (minT != MAX_INT)
       return minT;
     else

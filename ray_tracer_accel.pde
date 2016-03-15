@@ -17,8 +17,8 @@ float winsize=0;
 PVector ka = new PVector(0, 0, 0);
 PVector kd = new PVector(0, 0, 0);
 // Arrays to store properties of objects and lights
-Geometry[] objects = new Geometry[2000];
-Geometry[] primitives;
+Geometry[] objects = new Geometry[70000];
+Geometry[] primitives = new Geometry[70000];
 //Geometry[] named_objects = new Geometry[2000];
 HashMap<String,Geometry> named_objects = new HashMap<String,Geometry>();
 Stack listIndices = new Stack();
@@ -64,7 +64,7 @@ void setup() {
   printMatrix();
   //resetMatrix();    // you may want to reset the matrix here
   reInit();
-  interpreter("t06.cli");
+  interpreter("t10.cli");
 }
 
 // Press key 1 to 9 and 0 to run different test cases.
@@ -359,6 +359,18 @@ void interpreter(String filename) {
         List mylist = new List(startIndex,numObjects);
         numObjects = startIndex;
         objects[numObjects] = mylist;
+        numObjects++;
+      }
+//////////////////// end_accel ////////////////////
+    } else if (token[0].equals("end_accel")){
+      int startIndex = 0;
+      if (!listIndices.empty()){
+        startIndex = (int)listIndices.pop();
+        //println(startIndex,numObjects);
+        assert(startIndex < numObjects);
+        GridAccel mygrid = new GridAccel(startIndex,numObjects);
+        numObjects = startIndex;
+        objects[numObjects] = mygrid;
         numObjects++;
       }
 //////////////////// write ////////////////////
