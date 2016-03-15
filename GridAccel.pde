@@ -18,6 +18,7 @@ class GridAccel extends Geometry{
       primitives[i] = objects[i];
       numItems++;
     }
+    println("Num Items:",numItems);
     //println("Hello");
     PVector pmin = getPMin();
     PVector pmax = getPMax();
@@ -30,6 +31,8 @@ class GridAccel extends Geometry{
     voxels = new Voxel[nv];
     
     addGeometryToVoxels();
+
+    println(nv,nVoxels);
   }
   
   float intersects(PVector d, PVector P){
@@ -93,6 +96,7 @@ class GridAccel extends Geometry{
         currentVox = voxels[offset(int(pos.x),int(pos.y),int(pos.z))];
         float t;
         if (currentVox == null){
+          //println("is null");
           t = -1000;
         } else {
           t = currentVox.intersects(d,P);
@@ -206,7 +210,7 @@ class GridAccel extends Geometry{
     voxWidth.x = delta.x/nVoxels.x;
     voxWidth.y = delta.y/nVoxels.y;
     voxWidth.z = delta.z/nVoxels.z;
-    
+                
     invVoxWidth.x = (voxWidth.x == 0)? 0.0: 1.0/voxWidth.x;
     invVoxWidth.y = (voxWidth.y == 0)? 0.0: 1.0/voxWidth.y;
     invVoxWidth.z = (voxWidth.z == 0)? 0.0: 1.0/voxWidth.z;
@@ -217,9 +221,9 @@ class GridAccel extends Geometry{
   PVector voxelToPos(PVector V){
     PVector P = new PVector(0,0,0);
     
-    P.x = bounds.Pmin.x + P.x*voxWidth.x;
-    P.y = bounds.Pmin.y + P.y*voxWidth.y;
-    P.z = bounds.Pmin.z + P.z*voxWidth.z;
+    P.x = bounds.Pmin.x + V.x*voxWidth.x;
+    P.y = bounds.Pmin.y + V.y*voxWidth.y;
+    P.z = bounds.Pmin.z + V.z*voxWidth.z;
     
     return P;
   }
@@ -265,10 +269,10 @@ class GridAccel extends Geometry{
         }
       }
     }
-    println("Done");
+    //println("Done");
   }
   
   int offset(int x, int y, int z){
-    return int(z*nVoxels.x*nVoxels.y + y*nVoxels.y + x);
+    return int(z*nVoxels.x*nVoxels.y + y*nVoxels.x + x);
   }
 }

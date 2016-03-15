@@ -64,7 +64,7 @@ void setup() {
   printMatrix();
   //resetMatrix();    // you may want to reset the matrix here
   reInit();
-  interpreter("t10.cli");
+  interpreter("t11.cli");
 }
 
 // Press key 1 to 9 and 0 to run different test cases.

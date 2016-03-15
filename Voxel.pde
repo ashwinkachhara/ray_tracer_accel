@@ -27,7 +27,7 @@ class Voxel {
       }
     }
     //println("Yello");
-    if (minT != MAX_INT)
+    if (found)
       return minT;
     else
       return -1000;
