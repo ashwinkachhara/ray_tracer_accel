@@ -31,19 +31,20 @@ end
 
 translate 0 0 -6
 
-diffuse  .8 .8 .8  .2 .2 .2
-
 begin_list
 push
+diffuse  .5 .5 .5  .2 .2 .2
 translate -2 0 0
 read bun69k.cli
 pop
 
 push
+diffuse  .8672 .71875 .52734  .2 .2 .2
 read bun69k.cli
 pop
 
 push
+diffuse  .95 .95 .95  .2 .2 .2
 translate 2 0 0
 read bun69k.cli
 pop
